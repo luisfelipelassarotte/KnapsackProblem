@@ -7,17 +7,19 @@ public class RecursionMethod {
 
     static class Result {
         int maxValue;
+        int totalWeight;
         List<Integer> items;
 
-        Result(int maxValue, List<Integer> items) {
+        Result(int maxValue, int totalWeight, List<Integer> items) {
             this.maxValue = maxValue;
+            this.totalWeight = totalWeight;
             this.items = items;
         }
     }
 
     static Result mochila(int capacity, int[] peso, int[] valor, int n) {
         if (n == 0 || capacity == 0) {
-            return new Result(0, new ArrayList<>());
+            return new Result(0, 0, new ArrayList<>());
         }
 
         if (peso[n - 1] > capacity) {
@@ -27,6 +29,7 @@ public class RecursionMethod {
 
             Result include = mochila(capacity - peso[n - 1], peso, valor, n - 1);
             include.maxValue += valor[n - 1];
+            include.totalWeight += peso[n - 1];
             include.items.add(n);
 
             if (exclude.maxValue > include.maxValue) {
@@ -39,13 +42,14 @@ public class RecursionMethod {
 
     public static void main(String[] args) {
         int[] valor = new int[]{60, 100, 120, 150, 200};
-        int[] peso = new int[]{10, 10, 10, 10, 10};
+        int[] peso = new int[]{12, 17, 15, 19, 24};
         int capacity = 50;
         int n = valor.length;
 
         Result result = mochila(capacity, peso, valor, n);
 
         System.out.println("Valor máximo: " + result.maxValue);
+        System.out.println("Peso total na mochila: " + result.totalWeight);
         System.out.print("Itens na mochila: ");
         for (int item : result.items) {
             System.out.print("Item " + item + " ");
